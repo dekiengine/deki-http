@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>   // uint32_t in the Get/PostJson signatures below
 #include <string>
 #include <vector>
 #include <utility>
