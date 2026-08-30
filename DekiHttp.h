@@ -1,18 +1,18 @@
 #pragma once
 
 #include "IDekiHttpClient.h"
-#include "DekiHttpModule.h"
+#include "DekiHttpPackage.h"
 
 /**
  * @brief Active-driver registry and facade for HTTP.
  *
- * A platform integration module registers its IDekiHttpClient implementation
+ * A platform integration package registers its IDekiHttpClient implementation
  * via SetCurrent() during its setup phase. Consumers call DekiHttp::FetchUrl
  * / Get / PostJson directly — the singleton is dllexported from deki-http.dll
- * and imported by every consumer module.
+ * and imported by every consumer package.
  *
  * Lives in deki-http.dll (moved out of deki-engine-core) so that engine-core
- * stays free of concrete service abstractions. Modules that need HTTP add
+ * stays free of concrete service abstractions. Packages that need HTTP add
  * deki-http to their requires.
  */
 class DEKI_HTTP_API DekiHttp

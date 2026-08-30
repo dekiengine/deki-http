@@ -7,7 +7,7 @@
 /**
  * @brief Editor / desktop SetupComponent that registers a WinHttpClient with
  * DekiHttp. Auto-fired by SetupComponent::RunEditorAutoSetups() after
- * module load.
+ * package load.
  */
 class WinHttpClientComponent : public SetupComponent
 {

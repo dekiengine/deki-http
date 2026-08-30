@@ -7,7 +7,7 @@
 /**
  * @brief Desktop SetupComponent that registers a CurlHttpClient with DekiHttp
  * on POSIX platforms. Auto-fired by SetupComponent::RunEditorAutoSetups()
- * after module load, alongside WinHttpClientComponent — each installs its
+ * after package load, alongside WinHttpClientComponent — each installs its
  * driver only on the platform it supports, so exactly one wins.
  */
 class CurlHttpClientComponent : public SetupComponent

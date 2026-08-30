@@ -247,7 +247,7 @@ IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string& url,
 
 #else  // _WIN32
 
-// Windows uses WinHttpClient; this file compiles to nothing there so the module
+// Windows uses WinHttpClient; this file compiles to nothing there so the package
 // keeps one source list across platforms.
 
 std::string CurlHttpClient::FetchUrl(const std::string& /*url*/)

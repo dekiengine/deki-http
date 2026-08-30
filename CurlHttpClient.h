@@ -5,7 +5,7 @@
 /**
  * curl-backed IDekiHttpClient implementation for POSIX desktops (Linux, macOS).
  *
- * Why a subprocess and not libcurl: this module is compiled as part of every
+ * Why a subprocess and not libcurl: this package is compiled as part of every
  * project that depends on it, so a hard link-time dependency on libcurl would
  * turn "libcurl-dev isn't installed" into a build failure for the whole
  * project. Shelling out keeps the dependency at runtime, where a missing curl

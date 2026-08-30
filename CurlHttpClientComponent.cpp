@@ -2,7 +2,7 @@
 #include "DekiHttp.h"
 #include "DekiLogSystem.h"
 
-// Distinct name per translation unit on purpose: module sources are compiled as
+// Distinct name per translation unit on purpose: package sources are compiled as
 // a CMake unity build, so a file-static shared with another backend's component
 // would collide at the merged-TU level.
 static CurlHttpClient* s_CurlHttpDriver = nullptr;

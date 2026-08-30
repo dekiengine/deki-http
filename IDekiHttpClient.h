@@ -8,7 +8,7 @@
 /**
  * @brief Abstract HTTP client interface.
  *
- * Concrete implementations live in platform integration modules and register
+ * Concrete implementations live in platform integration packages and register
  * themselves with DekiHttp at boot. Consumers fetch the active client via
  * DekiHttp and call into the methods below; they never include any concrete
  * client header.
