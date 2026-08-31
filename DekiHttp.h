@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>  // uint32_t in the timeout parameters below
 #include "IDekiHttpClient.h"
 #include "DekiHttpPackage.h"
 
