@@ -27,8 +27,8 @@ var NAVTREE =
   [ "deki-http", "index.html", [
     [ "Components", "index.html#autotoc_md0", null ],
     [ "Component reference", "index.html#autotoc_md1", [
-      [ "CurlHttpClientComponent (curl HTTP Client)", "index.html#c-curlhttpclientcomponent", null ],
-      [ "WinHttpClientComponent (WinHTTP Client)", "index.html#c-winhttpclientcomponent", null ]
+      [ "CurlHttpClientComponent", "index.html#c-curlhttpclientcomponent", null ],
+      [ "WinHttpClientComponent", "index.html#c-winhttpclientcomponent", null ]
     ] ]
   ] ]
 ];
