@@ -11,7 +11,7 @@
 
 extern void DekiHttp_RegisterComponents();
 extern int  DekiHttp_GetAutoComponentCount();
-extern const DekiComponentMeta* DekiHttp_GetAutoComponentMeta(int index);
+extern const Deki::ComponentMeta* DekiHttp_GetAutoComponentMeta(int index);
 
 static bool s_HttpRegistered = false;
 
@@ -42,7 +42,7 @@ DEKI_PLUGIN_API void DekiPlugin_Shutdown(void)
     DekiHttp::SetCurrent(nullptr);
 }
 DEKI_PLUGIN_API int  DekiPlugin_GetComponentCount(void){ return DekiHttp_GetAutoComponentCount(); }
-DEKI_PLUGIN_API const DekiComponentMeta* DekiPlugin_GetComponentMeta(int index)
+DEKI_PLUGIN_API const Deki::ComponentMeta* DekiPlugin_GetComponentMeta(int index)
 {
     return DekiHttp_GetAutoComponentMeta(index);
 }

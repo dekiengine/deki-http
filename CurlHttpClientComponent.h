@@ -10,10 +10,10 @@
  * after package load, alongside WinHttpClientComponent — each installs its
  * driver only on the platform it supports, so exactly one wins.
  */
-class CurlHttpClientComponent : public SetupComponent
+class CurlHttpClientComponent : public Deki::SetupComponent
 {
 public:
-    DEKI_COMPONENT(CurlHttpClientComponent, SetupComponent, "System", "5c1f9a47-8e2b-4d73-b6a0-9d3c47f1e820", "")
+    DEKI_COMPONENT(CurlHttpClientComponent, Deki::SetupComponent, "System", "5c1f9a47-8e2b-4d73-b6a0-9d3c47f1e820", "")
     DEKI_DISPLAY_NAME("curl HTTP Client")
     DEKI_DESCRIPTION("Handles HTTP requests on Linux and macOS, for editor and desktop runs.")
 
