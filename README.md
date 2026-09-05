@@ -1,5 +1,7 @@
 # deki-http
 
+Documentation: https://dekiengine.github.io/deki-http/ (components and properties, generated from the code)
+
 Provides an `IDekiHttpClient` implementation for desktop builds, registered into `DekiHttp` (engine-core) via a SetupComponent that runs automatically when the editor finishes loading packages.
 
 Other packages consume HTTP via the one-call facade:
