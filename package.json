@@ -1,0 +1,9 @@
+{
+  "id": "deki-http",
+  "displayName": "HTTP",
+  "minEngine": "0.10.0",
+  "buildDefine": "DEKI_PACKAGE_HTTP",
+  "requires": [],
+  "features": [],
+  "dependencies": {}
+}
