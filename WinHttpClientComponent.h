@@ -9,12 +9,12 @@
  * DekiHttp. Auto-fired by SetupComponent::RunEditorAutoSetups() after
  * package load.
  */
+DEKI_CATEGORY("System")
+DEKI_DISPLAY_NAME("WinHTTP Client")
+DEKI_DESCRIPTION("Handles HTTP requests on Windows, for editor and desktop runs.")
 class WinHttpClientComponent : public Deki::SetupComponent
 {
 public:
-    DEKI_COMPONENT(WinHttpClientComponent, Deki::SetupComponent, "System", "8b3a7f12-4d6e-4c95-a814-2f9e0d5b8c3a", "")
-    DEKI_DISPLAY_NAME("WinHTTP Client")
-    DEKI_DESCRIPTION("Handles HTTP requests on Windows, for editor and desktop runs.")
 
     WinHttpClientComponent() = default;
     virtual ~WinHttpClientComponent() = default;
@@ -23,4 +23,3 @@ public:
     const char* GetSetupName() const override { return "WinHTTP Client"; }
 };
 
-#include "generated/WinHttpClientComponent.gen.h"
