@@ -29,6 +29,10 @@ var NAVTREE =
     [ "Component reference", "index.html#autotoc_md1", [
       [ "CurlHttpClientComponent", "index.html#c-curlhttpclientcomponent", null ],
       [ "WinHttpClientComponent", "index.html#c-winhttpclientcomponent", null ]
+    ] ],
+    [ "Changelog", "index.html#autotoc_md2", [
+      [ "0.15.0", "index.html#autotoc_md3", null ],
+      [ "Changed", "index.html#autotoc_md4", null ]
     ] ]
   ] ]
 ];
