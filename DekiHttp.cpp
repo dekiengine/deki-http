@@ -1,26 +1,29 @@
 #include "DekiHttp.h"
 
+namespace DekiHttp
+{
+
 namespace {
     IDekiHttpClient* s_Current = nullptr;
 }
 
-void DekiHttp::SetCurrent(IDekiHttpClient* client)
+void SetCurrent(IDekiHttpClient* client)
 {
     s_Current = client;
 }
 
-IDekiHttpClient* DekiHttp::GetCurrent()
+IDekiHttpClient* GetCurrent()
 {
     return s_Current;
 }
 
-std::string DekiHttp::FetchUrl(const std::string& url)
+std::string FetchUrl(const std::string& url)
 {
     if (!s_Current) return "";
     return s_Current->FetchUrl(url);
 }
 
-IDekiHttpClient::Response DekiHttp::Get(const std::string& url,
+IDekiHttpClient::Response Get(const std::string& url,
                                          const IDekiHttpClient::HeaderList& headers,
                                          uint32_t timeoutMs)
 {
@@ -28,7 +31,7 @@ IDekiHttpClient::Response DekiHttp::Get(const std::string& url,
     return s_Current->Get(url, headers, timeoutMs);
 }
 
-IDekiHttpClient::Response DekiHttp::PostJson(const std::string& url,
+IDekiHttpClient::Response PostJson(const std::string& url,
                                               const std::string& body,
                                               const IDekiHttpClient::HeaderList& headers,
                                               uint32_t timeoutMs)
@@ -36,3 +39,5 @@ IDekiHttpClient::Response DekiHttp::PostJson(const std::string& url,
     if (!s_Current) return {};
     return s_Current->PostJson(url, body, headers, timeoutMs);
 }
+
+}  // namespace DekiHttp

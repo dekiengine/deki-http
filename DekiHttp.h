@@ -4,6 +4,9 @@
 #include "IDekiHttpClient.h"
 #include "DekiHttpPackage.h"
 
+namespace DekiHttp
+{
+
 /**
  * @brief Active-driver registry and facade for HTTP.
  *
@@ -16,22 +19,20 @@
  * stays free of concrete service abstractions. Packages that need HTTP add
  * deki-http to their requires.
  */
-class DEKI_HTTP_API DekiHttp
-{
-public:
-    static void             SetCurrent(IDekiHttpClient* client);
-    static IDekiHttpClient* GetCurrent();
+DEKI_HTTP_API void             SetCurrent(IDekiHttpClient* client);
+DEKI_HTTP_API IDekiHttpClient* GetCurrent();
 
-    // --- Convenience pass-throughs. Return empty/transport-error if no client ---
+// --- Convenience pass-throughs. Return empty/transport-error if no client ---
 
-    static std::string FetchUrl(const std::string& url);
+DEKI_HTTP_API std::string FetchUrl(const std::string& url);
 
-    static IDekiHttpClient::Response Get(const std::string& url,
-                                         const IDekiHttpClient::HeaderList& headers = {},
-                                         uint32_t timeoutMs = 15000);
+DEKI_HTTP_API IDekiHttpClient::Response Get(const std::string& url,
+                                     const IDekiHttpClient::HeaderList& headers = {},
+                                     uint32_t timeoutMs = 15000);
 
-    static IDekiHttpClient::Response PostJson(const std::string& url,
-                                              const std::string& body,
-                                              const IDekiHttpClient::HeaderList& headers = {},
-                                              uint32_t timeoutMs = 15000);
-};
+DEKI_HTTP_API IDekiHttpClient::Response PostJson(const std::string& url,
+                                          const std::string& body,
+                                          const IDekiHttpClient::HeaderList& headers = {},
+                                          uint32_t timeoutMs = 15000);
+
+}  // namespace DekiHttp

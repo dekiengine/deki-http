@@ -1,20 +1,26 @@
 #include "CurlHttpClient.h"
 #include <deki/LogSystem.h>
 
-// This backend shells out to the curl binary, so it needs fork/exec and a
-// filesystem holding one. ESP32 has neither and uses ESPIDFHttpClient from
-// deki-esp32-integration, the same way Windows uses WinHttpClient.
 #if !defined(_WIN32) && !defined(ESP32)
-
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
 #include <string>
 #include <vector>
-
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#endif
+
+namespace DekiHttp
+{
+
+// This backend shells out to the curl binary, so it needs fork/exec and a
+// filesystem holding one. ESP32 has neither and uses ESPIDFHttpClient from
+// deki-esp32-integration, the same way Windows uses WinHttpClient.
+#if !defined(_WIN32) && !defined(ESP32)
+
+
 
 namespace
 {
@@ -271,3 +277,5 @@ IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string&, const std
 }
 
 #endif // !_WIN32 && !ESP32
+
+}  // namespace DekiHttp

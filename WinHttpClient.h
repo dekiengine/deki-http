@@ -2,6 +2,9 @@
 
 #include "IDekiHttpClient.h"
 
+namespace DekiHttp
+{
+
 /**
  * WinHTTP-backed IDekiHttpClient implementation. Synchronous GET via the
  * Windows WinHTTP API. Used by the editor / desktop builds; embedded boards
@@ -20,3 +23,5 @@ public:
 
     std::string FetchUrl(const std::string& url) override;
 };
+
+}  // namespace DekiHttp

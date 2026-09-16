@@ -5,6 +5,9 @@
 #include <vector>
 #include <utility>
 
+namespace DekiHttp
+{
+
 /**
  * @brief Abstract HTTP client interface.
  *
@@ -70,3 +73,5 @@ public:
         return {};
     }
 };
+
+}  // namespace DekiHttp

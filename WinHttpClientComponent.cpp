@@ -2,6 +2,9 @@
 #include "DekiHttp.h"
 #include <deki/LogSystem.h>
 
+namespace DekiHttp
+{
+
 // Distinct name per translation unit on purpose: package sources are compiled as
 // a CMake unity build, so a file-static shared with another backend's component
 // would collide at the merged-TU level.
@@ -26,3 +29,5 @@ void WinHttpClientComponent::Setup(SetupCallback onComplete)
 }
 
 DEKI_REGISTER_EDITOR_AUTO_SETUP(WinHttpClientComponent);
+
+}  // namespace DekiHttp

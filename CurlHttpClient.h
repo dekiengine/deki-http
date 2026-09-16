@@ -2,6 +2,9 @@
 
 #include "IDekiHttpClient.h"
 
+namespace DekiHttp
+{
+
 /**
  * curl-backed IDekiHttpClient implementation for POSIX desktops (Linux, macOS).
  *
@@ -34,3 +37,5 @@ public:
                       const HeaderList&  headers   = {},
                       uint32_t           timeoutMs = 15000) override;
 };
+
+}  // namespace DekiHttp

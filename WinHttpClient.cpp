@@ -2,9 +2,15 @@
 #include <deki/LogSystem.h>
 
 #ifdef _WIN32
-
 #include <windows.h>
 #include <winhttp.h>
+#endif
+
+namespace DekiHttp
+{
+
+#ifdef _WIN32
+
 
 std::string WinHttpClient::FetchUrl(const std::string& url)
 {
@@ -94,3 +100,5 @@ std::string WinHttpClient::FetchUrl(const std::string& /*url*/)
 }
 
 #endif
+
+}  // namespace DekiHttp
