@@ -35,7 +35,7 @@ DEKI_HTTP_API int DekiHttp_EnsureRegistered(void)
     return ::DekiHttp_GetAutoComponentCount();
 }
 
-DEKI_PLUGIN_API const char* DekiPlugin_GetName(void)    { return "DekiRendering::Deki HTTP Package"; }
+DEKI_PLUGIN_API const char* DekiPlugin_GetName(void)    { return "Deki HTTP Package"; }
 DEKI_PLUGIN_API const char* DekiPlugin_GetVersion(void)
 {
 #ifdef DEKI_PACKAGE_VERSION
