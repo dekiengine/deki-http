@@ -18,3 +18,18 @@ std::string body = DekiHttp::FetchUrl("http://example.com/api");
 ## Embedded targets
 
 This package is editor / desktop only. Embedded boards do not link it; their network stack lives in board-specific integration packages.
+
+## Namespace
+
+This package's types live in `DekiHttp`. Scene files store the qualified
+name, so a component is `DekiHttp::SomeComponent` there, and code naming one
+needs the namespace:
+
+```cpp
+using namespace DekiHttp;
+obj->AddComponent<SomeComponent>();
+```
+
+Scenes saved before 0.16.0 used bare names and still load: every component
+records what it used to be called, and a save writes the current name.
+
