@@ -28,6 +28,10 @@ void WinHttpClientComponent::Setup(SetupCallback onComplete)
     if (onComplete) onComplete(true);
 }
 
+// Project open, not Play. This only installs the client object; it makes no
+// request of its own, so it costs nothing to have ready. It also has to be
+// up before anything that fetches — deki-gps waits for Play, which is after
+// this either way.
 DEKI_REGISTER_EDITOR_AUTO_SETUP(WinHttpClientComponent);
 
 }  // namespace DekiHttp
