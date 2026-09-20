@@ -1,6 +1,6 @@
 # deki-http
 
-Documentation: https://dekiengine.github.io/deki-http/ (components and properties, generated from the code)
+Docs: https://dekiengine.github.io/deki-http/ (components and properties, generated from the code)
 
 Provides an `IDekiHttpClient` implementation for desktop builds, registered into `DekiHttp` (engine-core) via a SetupComponent that runs automatically when the editor finishes loading packages.
 
@@ -21,15 +21,12 @@ This package is editor / desktop only. Embedded boards do not link it; their net
 
 ## Namespace
 
-This package's types live in `DekiHttp`. Scene files store the qualified
-name, so a component is `DekiHttp::SomeComponent` there, and code naming one
-needs the namespace:
+Types live in `DekiHttp`. Scene files store the qualified name, and so does code:
 
 ```cpp
 using namespace DekiHttp;
 obj->AddComponent<SomeComponent>();
 ```
 
-Scenes saved before 0.16.0 used bare names and still load: every component
-records what it used to be called, and a save writes the current name.
+Scenes saved before 0.16.0 used bare names and still load; saving writes the current one.
 
