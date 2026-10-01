@@ -17,7 +17,7 @@ void WinHttpClientComponent::Setup(SetupCallback onComplete)
         s_WinHttpDriver = new WinHttpClient();
 
     DekiHttp::SetCurrent(s_WinHttpDriver);
-    DEKI_LOG_INFO("[deki-http] WinHttpClient registered with DekiHttp");
+    DEKI_LOG_DEBUG("[deki-http] WinHttpClient registered with DekiHttp");
 #else
     // WinHTTP does not exist here. Previously this registered anyway, so every
     // request reached a stub that logged "called on non-Windows platform" and

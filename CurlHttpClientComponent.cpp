@@ -21,7 +21,7 @@ void CurlHttpClientComponent::Setup(SetupCallback onComplete)
         s_CurlHttpDriver = new CurlHttpClient();
 
     DekiHttp::SetCurrent(s_CurlHttpDriver);
-    DEKI_LOG_INFO("[deki-http] CurlHttpClient registered with DekiHttp");
+    DEKI_LOG_DEBUG("[deki-http] CurlHttpClient registered with DekiHttp");
 
     if (onComplete) onComplete(true);
 #endif
