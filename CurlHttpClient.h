@@ -5,21 +5,18 @@
 namespace DekiHttp
 {
 
-/**
- * curl-backed IDekiHttpClient implementation for POSIX desktops (Linux, macOS).
- *
- * Why a subprocess and not libcurl: this package is compiled as part of every
- * project that depends on it, so a hard link-time dependency on libcurl would
- * turn "libcurl-dev isn't installed" into a build failure for the whole
- * project. Shelling out keeps the dependency at runtime, where a missing curl
- * degrades to a logged transport error instead. The editor's own
- * EditorHttpUtils made the same trade.
- *
- * curl is invoked via fork/execvp with an argv array — never through a shell —
- * so URLs, headers and bodies need no quoting and cannot inject commands.
- *
- * Implements the full interface: status codes, request headers, and JSON POST.
- */
+/// IDekiHttpClient that runs the curl program, for POSIX desktops (Linux,
+/// macOS). Implements the whole interface: status codes, request headers and
+/// JSON POST.
+///
+/// A subprocess rather than libcurl: this package is compiled into every
+/// project that depends on it, and linking libcurl would make a missing
+/// libcurl-dev fail the whole project's build. Run as a program, a missing
+/// curl is only a logged transport error. The editor's EditorHttpUtils does
+/// the same.
+///
+/// curl runs through fork/execvp with an argv array, never a shell, so URLs,
+/// headers and bodies need no quoting and cannot inject commands.
 class CurlHttpClient : public IDekiHttpClient
 {
 public:

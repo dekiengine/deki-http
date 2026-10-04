@@ -5,16 +5,15 @@
 namespace DekiHttp
 {
 
-// Distinct name per translation unit on purpose: package sources are compiled as
-// a CMake unity build, so a file-static shared with another backend's component
-// would collide at the merged-TU level.
+// A name of its own: package sources are compiled as a CMake unity build, so a
+// file-static with the same name as another backend's would collide.
 static CurlHttpClient* s_CurlHttpDriver = nullptr;
 
 void CurlHttpClientComponent::Setup(SetupCallback onComplete)
 {
 #ifdef _WIN32
-    // Windows is served by WinHttpClientComponent. Registering here too would
-    // make the winner depend on auto-setup ordering.
+    // Windows uses WinHttpClientComponent. Registering here too would make
+    // the result depend on the order auto-setups run in.
     if (onComplete)
     {
         onComplete(true);
@@ -35,10 +34,9 @@ void CurlHttpClientComponent::Setup(SetupCallback onComplete)
 #endif
 }
 
-// Project open, not Play. This only installs the client object; it makes no
-// request of its own, so it costs nothing to have ready. It also has to be
-// up before anything that fetches — deki-gps waits for Play, which is after
-// this either way.
+// Runs when the project opens, not at Play. It only installs the client and
+// makes no request, so it costs nothing, and it is ready before anything
+// fetches (deki-gps waits for Play).
 DEKI_REGISTER_EDITOR_AUTO_SETUP(CurlHttpClientComponent);
 
 }  // namespace DekiHttp

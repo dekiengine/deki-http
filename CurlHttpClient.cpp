@@ -15,27 +15,22 @@
 namespace DekiHttp
 {
 
-// This backend shells out to the curl binary, so it needs fork/exec and a
-// filesystem holding one. ESP32 has neither and uses ESPIDFHttpClient from
-// deki-esp32-integration, the same way Windows uses WinHttpClient.
+// This client runs the curl program, so it needs fork/exec and a filesystem
+// with curl on it. ESP32 has neither and uses ESPIDFHttpClient from
+// deki-esp32-integration, as Windows uses WinHttpClient.
 #if !defined(_WIN32) && !defined(ESP32)
 
 namespace
 {
 
-// Marker that separates the response body from the status code curl appends
-// via --write-out. A body could legitimately end in digits or newlines, so we
-// split on the LAST occurrence of a token that will not appear in real content.
+// Separates the response body from the status code curl appends with
+// --write-out. A body can end in digits or newlines, so the split is at the
+// last occurrence of a token that real content will not contain.
 constexpr const char* kStatusMarker = "\n__deki_http_status__:";
 
-/**
- * Run curl with an explicit argv (no shell) and collect stdout.
- *
- * @param args      argv for curl, excluding argv[0]
- * @param stdinData optional request body piped to curl's stdin
- * @param outStdout captured stdout
- * @return true if curl was launched and exited 0
- */
+/// Runs curl with `args` as its argv (after argv[0]), with no shell, and
+/// collects its output. `stdinData`, when set, is piped to curl's stdin.
+/// Returns true if curl started and exited with 0.
 bool RunCurl(const std::vector<std::string>& args, const std::string* stdinData, std::string& outStdout)
 {
     outStdout.clear();
@@ -56,7 +51,7 @@ bool RunCurl(const std::vector<std::string>& args, const std::string* stdinData,
         return false;
     }
 
-    // Build argv. Pointers reference `args`, which outlives the call.
+    // argv; the pointers are into `args`, which outlives the call.
     std::vector<char*> argv;
     argv.push_back(const_cast<char*>("curl"));
     for (const auto& a : args)
@@ -95,7 +90,7 @@ bool RunCurl(const std::vector<std::string>& args, const std::string* stdinData,
         }
 
         execvp("curl", argv.data());
-        _exit(127);  // exec failed — curl not installed or not on PATH
+        _exit(127);  // exec failed: curl not installed or not on PATH
     }
 
     // Parent.
@@ -104,9 +99,9 @@ bool RunCurl(const std::vector<std::string>& args, const std::string* stdinData,
     if (stdinData)
     {
         close(inPipe[0]);
-        // curl can exit early (bad URL, timeout) leaving nobody reading this
-        // pipe; the default SIGPIPE would kill the editor rather than the
-        // write just failing. Ignore it for the duration of the write.
+        // curl can exit early (bad URL, timeout) with nobody reading this
+        // pipe, and the default SIGPIPE would kill the editor instead of
+        // failing the write. Ignored while writing.
         struct sigaction ignore{}, previous{};
         ignore.sa_handler = SIG_IGN;
         sigemptyset(&ignore.sa_mask);
@@ -167,14 +162,14 @@ bool RunCurl(const std::vector<std::string>& args, const std::string* stdinData,
     }
     if (code != 0)
     {
-        // curl writes its diagnostic to stderr, which we merged into stdout.
+        // curl writes its error to stderr, which is merged into stdout.
         DEKI_LOG_WARNING("[deki-http] curl exited %d: %s", code, outStdout.c_str());
         return false;
     }
     return true;
 }
 
-/// Split curl's combined output into body + status code.
+/// Splits curl's output into the body and the status code.
 IDekiHttpClient::Response SplitStatus(const std::string& raw)
 {
     IDekiHttpClient::Response r;
@@ -197,7 +192,7 @@ IDekiHttpClient::Response SplitStatus(const std::string& raw)
     return r;
 }
 
-/// Flags shared by every request.
+/// Flags every request uses.
 void AppendCommonArgs(std::vector<std::string>& args, const IDekiHttpClient::HeaderList& headers, uint32_t timeoutMs)
 {
     args.push_back("-sS");  // quiet, but still report errors
@@ -219,7 +214,7 @@ void AppendCommonArgs(std::vector<std::string>& args, const IDekiHttpClient::Hea
 std::string CurlHttpClient::FetchUrl(const std::string& url)
 {
     const Response r = Get(url);
-    // Legacy contract: empty string on any failure, including non-2xx.
+    // FetchUrl returns an empty string on any failure, including non-2xx.
     if (r.status < 200 || r.status > 299)
     {
         return "";
@@ -268,8 +263,8 @@ IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string& url, const
 
 #else  // _WIN32 or ESP32
 
-// Those platforms have their own client; this file compiles to nothing there
-// so the package keeps one source list across platforms.
+// Those platforms have their own client; here this file has only stubs, so
+// the package keeps one source list on every platform.
 
 std::string CurlHttpClient::FetchUrl(const std::string& /*url*/)
 {

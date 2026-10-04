@@ -7,22 +7,19 @@
 namespace DekiHttp
 {
 
-/**
- * @brief Active-driver registry and facade for HTTP.
- *
- * A platform integration package registers its IDekiHttpClient implementation
- * via SetCurrent() during its setup phase. Consumers call DekiHttp::FetchUrl
- * / Get / PostJson directly — the singleton is dllexported from deki-http.dll
- * and imported by every consumer package.
- *
- * Lives in deki-http.dll (moved out of deki-engine-core) so that engine-core
- * stays free of concrete service abstractions. Packages that need HTTP add
- * deki-http to their requires.
- */
+/// The active HTTP client and calls that go to it.
+///
+/// A platform integration package registers its IDekiHttpClient with
+/// SetCurrent() during setup. Users call DekiHttp::FetchUrl / Get / PostJson;
+/// the client lives in deki-http.dll and every package using it imports it.
+///
+/// It is a package, not part of deki-engine-core, so the engine core has no
+/// service implementations. Packages that need HTTP list deki-http in their
+/// requires.
 DEKI_HTTP_API void SetCurrent(IDekiHttpClient* client);
 DEKI_HTTP_API IDekiHttpClient* GetCurrent();
 
-// --- Convenience pass-throughs. Return empty/transport-error if no client ---
+// --- Calls passed to the current client; empty or a transport error without one ---
 
 DEKI_HTTP_API std::string FetchUrl(const std::string& url);
 

@@ -7,12 +7,10 @@
 namespace DekiHttp
 {
 
-/**
- * @brief Desktop SetupComponent that registers a CurlHttpClient with DekiHttp
- * on POSIX platforms. Auto-fired by SetupComponent::RunEditorAutoSetups()
- * after package load, alongside WinHttpClientComponent — each installs its
- * driver only on the platform it supports, so exactly one wins.
- */
+/// Desktop SetupComponent that registers a CurlHttpClient with DekiHttp on
+/// POSIX platforms. SetupComponent::RunEditorAutoSetups() runs it after
+/// package load, along with WinHttpClientComponent; each installs its client
+/// only on its own platform, so exactly one is used.
 DEKI_CATEGORY("System")
 DEKI_DISPLAY_NAME("curl HTTP Client")
 DEKI_DESCRIPTION("Handles HTTP requests on Linux and macOS, for editor and desktop runs.")

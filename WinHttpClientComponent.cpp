@@ -5,9 +5,8 @@
 namespace DekiHttp
 {
 
-// Distinct name per translation unit on purpose: package sources are compiled as
-// a CMake unity build, so a file-static shared with another backend's component
-// would collide at the merged-TU level.
+// A name of its own: package sources are compiled as a CMake unity build, so a
+// file-static with the same name as another backend's would collide.
 static WinHttpClient* s_WinHttpDriver = nullptr;
 
 void WinHttpClientComponent::Setup(SetupCallback onComplete)
@@ -21,10 +20,9 @@ void WinHttpClientComponent::Setup(SetupCallback onComplete)
     DekiHttp::SetCurrent(s_WinHttpDriver);
     DEKI_LOG_DEBUG("[deki-http] WinHttpClient registered with DekiHttp");
 #else
-    // WinHTTP does not exist here. Previously this registered anyway, so every
-    // request reached a stub that logged "called on non-Windows platform" and
-    // returned empty — the driver slot looked filled while nothing worked.
-    // Leave it empty for CurlHttpClientComponent to claim.
+    // No WinHTTP here. Leave the slot empty for CurlHttpClientComponent; a
+    // registered stub would make the slot look filled while every request
+    // fails.
 #endif
 
     if (onComplete)
@@ -33,10 +31,9 @@ void WinHttpClientComponent::Setup(SetupCallback onComplete)
     }
 }
 
-// Project open, not Play. This only installs the client object; it makes no
-// request of its own, so it costs nothing to have ready. It also has to be
-// up before anything that fetches — deki-gps waits for Play, which is after
-// this either way.
+// Runs when the project opens, not at Play. It only installs the client and
+// makes no request, so it costs nothing, and it is ready before anything
+// fetches (deki-gps waits for Play).
 DEKI_REGISTER_EDITOR_AUTO_SETUP(WinHttpClientComponent);
 
 }  // namespace DekiHttp

@@ -1,7 +1,4 @@
-/**
- * @file DekiHttpPackage.cpp
- * @brief Package entry point for deki-http
- */
+// Package entry point for deki-http.
 #include "DekiHttpPackage.h"
 #include <deki/interop/Plugin.h>
 #include <deki/LogSystem.h>

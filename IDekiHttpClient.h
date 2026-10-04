@@ -8,20 +8,17 @@
 namespace DekiHttp
 {
 
-/**
- * @brief Abstract HTTP client interface.
- *
- * Concrete implementations live in platform integration packages and register
- * themselves with DekiHttp at boot. Consumers fetch the active client via
- * DekiHttp and call into the methods below; they never include any concrete
- * client header.
- *
- * Failure modes are uniform across implementations:
- *   - Network / DNS / TLS errors → Response.status == -1, body empty.
- *   - Non-2xx → Response.status carries the code, body may be empty or
- *     contain the server's error payload.
- *   Implementations log details on failure.
- */
+/// HTTP client interface.
+///
+/// Implementations live in platform integration packages and register with
+/// DekiHttp at boot. Users get the active client through DekiHttp and never
+/// include an implementation's header.
+///
+/// Every implementation fails the same way:
+///   - Network, DNS or TLS error: Response.status is -1, body empty.
+///   - Non-2xx: Response.status holds the code; the body may be empty or hold
+///     the server's error payload.
+/// Implementations log the details.
 class IDekiHttpClient
 {
 public:
@@ -35,19 +32,13 @@ public:
 
     using HeaderList = std::vector<std::pair<std::string, std::string>>;
 
-    /**
-     * @brief Legacy synchronous GET. Returns the response body as a string.
-     *        Returns an empty string on any failure (transport, non-2xx, etc.).
-     *        Kept for backward compatibility with existing call sites.
-     */
+    /// Blocking GET that returns the body, or an empty string on any failure
+    /// (transport error, non-2xx). The older call; Get() also gives the status.
     virtual std::string FetchUrl(const std::string& url) = 0;
 
-    /**
-     * @brief Synchronous GET with custom request headers.
-     *        Default implementation falls back to FetchUrl() and returns the
-     *        body without status info; overriding gives status + body + header
-     *        support. Implementations on real HTTP stacks override this.
-     */
+    /// Blocking GET with request headers. The default calls FetchUrl(),
+    /// ignores the headers, and reports 200 or -1; real HTTP stacks override it
+    /// to give the status, body and headers.
     virtual Response Get(const std::string& url, const HeaderList& headers = {}, uint32_t timeoutMs = 15000)
     {
         (void)headers;
@@ -58,12 +49,9 @@ public:
         return r;
     }
 
-    /**
-     * @brief Synchronous POST with JSON body. Implementations set
-     *        Content-Type: application/json automatically. Default returns
-     *        a transport error so stubs / legacy clients that don't override
-     *        fail loudly rather than silently succeeding.
-     */
+    /// Blocking POST of a JSON body; implementations set Content-Type:
+    /// application/json. The default returns a transport error, so a client
+    /// that does not override it fails visibly instead of seeming to succeed.
     virtual Response PostJson(const std::string& url, const std::string& body, const HeaderList& headers = {},
                               uint32_t timeoutMs = 15000)
     {

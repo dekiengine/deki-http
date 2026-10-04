@@ -5,16 +5,11 @@
 namespace DekiHttp
 {
 
-/**
- * WinHTTP-backed IDekiHttpClient implementation. Synchronous GET via the
- * Windows WinHTTP API. Used by the editor / desktop builds; embedded boards
- * have their own platform-specific HTTP integration.
- *
- * Only FetchUrl is implemented today. Get(headers) / PostJson use the
- * IDekiHttpClient default fallback, which routes Get through FetchUrl and
- * returns a transport error for PostJson. Extending the WinHTTP backend with
- * full header / POST support can happen lazily when a desktop consumer needs it.
- */
+/// IDekiHttpClient on the Windows WinHTTP API, with blocking GET. Used by the
+/// editor and desktop builds; boards have their own HTTP integration.
+///
+/// Only FetchUrl is implemented. Get and PostJson use the IDekiHttpClient
+/// defaults: Get goes through FetchUrl, and PostJson returns a transport error.
 class WinHttpClient : public IDekiHttpClient
 {
 public:
