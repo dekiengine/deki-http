@@ -7,9 +7,9 @@
 #include <deki/LogSystem.h>
 #include "DekiHttp.h"
 
-extern void DekiHttp_RegisterComponents();
-extern int DekiHttp_GetAutoComponentCount();
-extern const Deki::ComponentMeta* DekiHttp_GetAutoComponentMeta(int index);
+extern void DekiHttpRegisterComponents();
+extern int DekiHttpGetAutoComponentCount();
+extern const Deki::ComponentMeta* DekiHttpGetAutoComponentMeta(int index);
 
 namespace DekiHttp
 {
@@ -24,22 +24,22 @@ using namespace DekiHttp;
 
 extern "C"
 {
-    DEKI_HTTP_API int DekiHttp_EnsureRegistered(void)
+    DEKI_HTTP_API int DekiHttpEnsureRegistered(void)
     {
         if (s_HttpRegistered)
         {
-            return ::DekiHttp_GetAutoComponentCount();
+            return ::DekiHttpGetAutoComponentCount();
         }
         s_HttpRegistered = true;
-        ::DekiHttp_RegisterComponents();
-        return ::DekiHttp_GetAutoComponentCount();
+        ::DekiHttpRegisterComponents();
+        return ::DekiHttpGetAutoComponentCount();
     }
 
-    DEKI_PLUGIN_API const char* DekiPlugin_GetName(void)
+    DEKI_PLUGIN_API const char* DekiPluginGetName(void)
     {
         return "Deki HTTP Package";
     }
-    DEKI_PLUGIN_API const char* DekiPlugin_GetVersion(void)
+    DEKI_PLUGIN_API const char* DekiPluginGetVersion(void)
     {
 #ifdef DEKI_PACKAGE_VERSION
         return DEKI_PACKAGE_VERSION;
@@ -47,26 +47,26 @@ extern "C"
         return "0.0.0-dev";
 #endif
     }
-    DEKI_PLUGIN_API int DekiPlugin_Init(void)
+    DEKI_PLUGIN_API int DekiPluginInit(void)
     {
         return 0;
     }
-    DEKI_PLUGIN_API void DekiPlugin_Shutdown(void)
+    DEKI_PLUGIN_API void DekiPluginShutdown(void)
     {
         s_HttpRegistered = false;
         DekiHttp::SetCurrent(nullptr);
     }
-    DEKI_PLUGIN_API int DekiPlugin_GetComponentCount(void)
+    DEKI_PLUGIN_API int DekiPluginGetComponentCount(void)
     {
-        return ::DekiHttp_GetAutoComponentCount();
+        return ::DekiHttpGetAutoComponentCount();
     }
-    DEKI_PLUGIN_API const Deki::ComponentMeta* DekiPlugin_GetComponentMeta(int index)
+    DEKI_PLUGIN_API const Deki::ComponentMeta* DekiPluginGetComponentMeta(int index)
     {
-        return ::DekiHttp_GetAutoComponentMeta(index);
+        return ::DekiHttpGetAutoComponentMeta(index);
     }
-    DEKI_PLUGIN_API void DekiPlugin_RegisterComponents(void)
+    DEKI_PLUGIN_API void DekiPluginRegisterComponents(void)
     {
-        DekiHttp_EnsureRegistered();
+        DekiHttpEnsureRegistered();
     }
 
 }  // extern "C"
