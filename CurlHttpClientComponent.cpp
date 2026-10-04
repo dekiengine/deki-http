@@ -15,15 +15,23 @@ void CurlHttpClientComponent::Setup(SetupCallback onComplete)
 #ifdef _WIN32
     // Windows is served by WinHttpClientComponent. Registering here too would
     // make the winner depend on auto-setup ordering.
-    if (onComplete) onComplete(true);
+    if (onComplete)
+    {
+        onComplete(true);
+    }
 #else
     if (!s_CurlHttpDriver)
+    {
         s_CurlHttpDriver = new CurlHttpClient();
+    }
 
     DekiHttp::SetCurrent(s_CurlHttpDriver);
     DEKI_LOG_DEBUG("[deki-http] CurlHttpClient registered with DekiHttp");
 
-    if (onComplete) onComplete(true);
+    if (onComplete)
+    {
+        onComplete(true);
+    }
 #endif
 }
 

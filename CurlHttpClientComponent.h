@@ -20,13 +20,11 @@ DEKI_FORMER_NAME("CurlHttpClientComponent")
 class CurlHttpClientComponent : public Deki::SetupComponent
 {
 public:
-
     CurlHttpClientComponent() = default;
     virtual ~CurlHttpClientComponent() = default;
 
-    void        Setup(SetupCallback onComplete) override;
+    void Setup(SetupCallback onComplete) override;
     const char* GetSetupName() const override { return "curl HTTP Client"; }
 };
 
 }  // namespace DekiHttp
-

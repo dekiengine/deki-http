@@ -19,13 +19,11 @@ DEKI_FORMER_NAME("WinHttpClientComponent")
 class WinHttpClientComponent : public Deki::SetupComponent
 {
 public:
-
     WinHttpClientComponent() = default;
     virtual ~WinHttpClientComponent() = default;
 
-    void        Setup(SetupCallback onComplete) override;
+    void Setup(SetupCallback onComplete) override;
     const char* GetSetupName() const override { return "WinHTTP Client"; }
 };
 
 }  // namespace DekiHttp
-

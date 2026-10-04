@@ -23,19 +23,15 @@ namespace DekiHttp
 class CurlHttpClient : public IDekiHttpClient
 {
 public:
-    CurlHttpClient()  = default;
+    CurlHttpClient() = default;
     ~CurlHttpClient() override = default;
 
     std::string FetchUrl(const std::string& url) override;
 
-    Response Get(const std::string& url,
-                 const HeaderList&  headers   = {},
-                 uint32_t           timeoutMs = 15000) override;
+    Response Get(const std::string& url, const HeaderList& headers = {}, uint32_t timeoutMs = 15000) override;
 
-    Response PostJson(const std::string& url,
-                      const std::string& body,
-                      const HeaderList&  headers   = {},
-                      uint32_t           timeoutMs = 15000) override;
+    Response PostJson(const std::string& url, const std::string& body, const HeaderList& headers = {},
+                      uint32_t timeoutMs = 15000) override;
 };
 
 }  // namespace DekiHttp

@@ -18,7 +18,7 @@ namespace DekiHttp
 class WinHttpClient : public IDekiHttpClient
 {
 public:
-    WinHttpClient()  = default;
+    WinHttpClient() = default;
     ~WinHttpClient() override = default;
 
     std::string FetchUrl(const std::string& url) override;

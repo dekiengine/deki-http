@@ -19,20 +19,18 @@ namespace DekiHttp
  * stays free of concrete service abstractions. Packages that need HTTP add
  * deki-http to their requires.
  */
-DEKI_HTTP_API void             SetCurrent(IDekiHttpClient* client);
+DEKI_HTTP_API void SetCurrent(IDekiHttpClient* client);
 DEKI_HTTP_API IDekiHttpClient* GetCurrent();
 
 // --- Convenience pass-throughs. Return empty/transport-error if no client ---
 
 DEKI_HTTP_API std::string FetchUrl(const std::string& url);
 
-DEKI_HTTP_API IDekiHttpClient::Response Get(const std::string& url,
-                                     const IDekiHttpClient::HeaderList& headers = {},
-                                     uint32_t timeoutMs = 15000);
+DEKI_HTTP_API IDekiHttpClient::Response Get(const std::string& url, const IDekiHttpClient::HeaderList& headers = {},
+                                            uint32_t timeoutMs = 15000);
 
-DEKI_HTTP_API IDekiHttpClient::Response PostJson(const std::string& url,
-                                          const std::string& body,
-                                          const IDekiHttpClient::HeaderList& headers = {},
-                                          uint32_t timeoutMs = 15000);
+DEKI_HTTP_API IDekiHttpClient::Response PostJson(const std::string& url, const std::string& body,
+                                                 const IDekiHttpClient::HeaderList& headers = {},
+                                                 uint32_t timeoutMs = 15000);
 
 }  // namespace DekiHttp

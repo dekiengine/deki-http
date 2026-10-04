@@ -20,8 +20,6 @@ namespace DekiHttp
 // deki-esp32-integration, the same way Windows uses WinHttpClient.
 #if !defined(_WIN32) && !defined(ESP32)
 
-
-
 namespace
 {
 
@@ -38,14 +36,12 @@ constexpr const char* kStatusMarker = "\n__deki_http_status__:";
  * @param outStdout captured stdout
  * @return true if curl was launched and exited 0
  */
-bool RunCurl(const std::vector<std::string>& args,
-             const std::string*              stdinData,
-             std::string&                    outStdout)
+bool RunCurl(const std::vector<std::string>& args, const std::string* stdinData, std::string& outStdout)
 {
     outStdout.clear();
 
-    int outPipe[2] = {-1, -1};
-    int inPipe[2]  = {-1, -1};
+    int outPipe[2] = { -1, -1 };
+    int inPipe[2] = { -1, -1 };
 
     if (pipe(outPipe) != 0)
     {
@@ -55,7 +51,8 @@ bool RunCurl(const std::vector<std::string>& args,
     if (stdinData && pipe(inPipe) != 0)
     {
         DEKI_LOG_ERROR("[deki-http] pipe() failed: %s", strerror(errno));
-        close(outPipe[0]); close(outPipe[1]);
+        close(outPipe[0]);
+        close(outPipe[1]);
         return false;
     }
 
@@ -63,15 +60,22 @@ bool RunCurl(const std::vector<std::string>& args,
     std::vector<char*> argv;
     argv.push_back(const_cast<char*>("curl"));
     for (const auto& a : args)
+    {
         argv.push_back(const_cast<char*>(a.c_str()));
+    }
     argv.push_back(nullptr);
 
     const pid_t pid = fork();
     if (pid < 0)
     {
         DEKI_LOG_ERROR("[deki-http] fork() failed: %s", strerror(errno));
-        close(outPipe[0]); close(outPipe[1]);
-        if (stdinData) { close(inPipe[0]); close(inPipe[1]); }
+        close(outPipe[0]);
+        close(outPipe[1]);
+        if (stdinData)
+        {
+            close(inPipe[0]);
+            close(inPipe[1]);
+        }
         return false;
     }
 
@@ -111,12 +115,13 @@ bool RunCurl(const std::vector<std::string>& args,
         size_t written = 0;
         while (written < stdinData->size())
         {
-            const ssize_t n = write(inPipe[1],
-                                    stdinData->data() + written,
-                                    stdinData->size() - written);
+            const ssize_t n = write(inPipe[1], stdinData->data() + written, stdinData->size() - written);
             if (n <= 0)
             {
-                if (n < 0 && errno == EINTR) continue;
+                if (n < 0 && errno == EINTR)
+                {
+                    continue;
+                }
                 break;
             }
             written += static_cast<size_t>(n);
@@ -132,7 +137,10 @@ bool RunCurl(const std::vector<std::string>& args,
     {
         if (n < 0)
         {
-            if (errno == EINTR) continue;
+            if (errno == EINTR)
+            {
+                continue;
+            }
             break;
         }
         outStdout.append(buffer, static_cast<size_t>(n));
@@ -140,7 +148,9 @@ bool RunCurl(const std::vector<std::string>& args,
     close(outPipe[0]);
 
     int status = 0;
-    while (waitpid(pid, &status, 0) < 0 && errno == EINTR) {}
+    while (waitpid(pid, &status, 0) < 0 && errno == EINTR)
+    {
+    }
 
     if (!WIFEXITED(status))
     {
@@ -181,17 +191,17 @@ IDekiHttpClient::Response SplitStatus(const std::string& raw)
     const std::string codeText = raw.substr(marker + strlen(kStatusMarker));
     r.status = std::atoi(codeText.c_str());
     if (r.status == 0)
+    {
         r.status = -1;
+    }
     return r;
 }
 
 /// Flags shared by every request.
-void AppendCommonArgs(std::vector<std::string>& args,
-                      const IDekiHttpClient::HeaderList& headers,
-                      uint32_t timeoutMs)
+void AppendCommonArgs(std::vector<std::string>& args, const IDekiHttpClient::HeaderList& headers, uint32_t timeoutMs)
 {
-    args.push_back("-sS");                  // quiet, but still report errors
-    args.push_back("-L");                   // follow redirects
+    args.push_back("-sS");  // quiet, but still report errors
+    args.push_back("-L");   // follow redirects
     args.push_back("--max-time");
     args.push_back(std::to_string((timeoutMs + 999) / 1000));  // curl wants seconds
     args.push_back("--write-out");
@@ -211,30 +221,30 @@ std::string CurlHttpClient::FetchUrl(const std::string& url)
     const Response r = Get(url);
     // Legacy contract: empty string on any failure, including non-2xx.
     if (r.status < 200 || r.status > 299)
+    {
         return "";
+    }
     return r.body;
 }
 
-IDekiHttpClient::Response CurlHttpClient::Get(const std::string& url,
-                                              const HeaderList&  headers,
-                                              uint32_t           timeoutMs)
+IDekiHttpClient::Response CurlHttpClient::Get(const std::string& url, const HeaderList& headers, uint32_t timeoutMs)
 {
     std::vector<std::string> args;
     AppendCommonArgs(args, headers, timeoutMs);
-    args.push_back("--");     // no more flags; a URL starting with '-' is still a URL
+    args.push_back("--");  // no more flags; a URL starting with '-' is still a URL
     args.push_back(url);
 
     std::string raw;
     if (!RunCurl(args, nullptr, raw))
-        return {};            // status -1, empty body
+    {
+        return {};  // status -1, empty body
+    }
 
     return SplitStatus(raw);
 }
 
-IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string& url,
-                                                   const std::string& body,
-                                                   const HeaderList&  headers,
-                                                   uint32_t           timeoutMs)
+IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string& url, const std::string& body,
+                                                   const HeaderList& headers, uint32_t timeoutMs)
 {
     std::vector<std::string> args;
     AppendCommonArgs(args, headers, timeoutMs);
@@ -243,13 +253,15 @@ IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string& url,
     args.push_back("-X");
     args.push_back("POST");
     args.push_back("--data-binary");
-    args.push_back("@-");     // read the body from stdin, so it needs no escaping
+    args.push_back("@-");  // read the body from stdin, so it needs no escaping
     args.push_back("--");
     args.push_back(url);
 
     std::string raw;
     if (!RunCurl(args, &body, raw))
+    {
         return {};
+    }
 
     return SplitStatus(raw);
 }
@@ -270,12 +282,11 @@ IDekiHttpClient::Response CurlHttpClient::Get(const std::string&, const HeaderLi
     return {};
 }
 
-IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string&, const std::string&,
-                                                   const HeaderList&, uint32_t)
+IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string&, const std::string&, const HeaderList&, uint32_t)
 {
     return {};
 }
 
-#endif // !_WIN32 && !ESP32
+#endif  // !_WIN32 && !ESP32
 
 }  // namespace DekiHttp

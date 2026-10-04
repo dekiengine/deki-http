@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>   // uint32_t in the Get/PostJson signatures below
+#include <cstdint>  // uint32_t in the Get/PostJson signatures below
 #include <string>
 #include <vector>
 #include <utility>
@@ -27,9 +27,10 @@ class IDekiHttpClient
 public:
     virtual ~IDekiHttpClient() = default;
 
-    struct Response {
-        int          status = -1;   // HTTP status, or -1 on transport error
-        std::string  body;          // response body (may be empty on failure)
+    struct Response
+    {
+        int status = -1;   // HTTP status, or -1 on transport error
+        std::string body;  // response body (may be empty on failure)
     };
 
     using HeaderList = std::vector<std::pair<std::string, std::string>>;
@@ -47,13 +48,12 @@ public:
      *        body without status info; overriding gives status + body + header
      *        support. Implementations on real HTTP stacks override this.
      */
-    virtual Response Get(const std::string& url,
-                         const HeaderList&  headers   = {},
-                         uint32_t           timeoutMs = 15000)
+    virtual Response Get(const std::string& url, const HeaderList& headers = {}, uint32_t timeoutMs = 15000)
     {
-        (void)headers; (void)timeoutMs;
+        (void)headers;
+        (void)timeoutMs;
         Response r;
-        r.body   = FetchUrl(url);
+        r.body = FetchUrl(url);
         r.status = r.body.empty() ? -1 : 200;
         return r;
     }
@@ -64,12 +64,13 @@ public:
      *        a transport error so stubs / legacy clients that don't override
      *        fail loudly rather than silently succeeding.
      */
-    virtual Response PostJson(const std::string& url,
-                              const std::string& body,
-                              const HeaderList&  headers   = {},
-                              uint32_t           timeoutMs = 15000)
+    virtual Response PostJson(const std::string& url, const std::string& body, const HeaderList& headers = {},
+                              uint32_t timeoutMs = 15000)
     {
-        (void)url; (void)body; (void)headers; (void)timeoutMs;
+        (void)url;
+        (void)body;
+        (void)headers;
+        (void)timeoutMs;
         return {};
     }
 };

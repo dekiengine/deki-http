@@ -14,7 +14,9 @@ void WinHttpClientComponent::Setup(SetupCallback onComplete)
 {
 #ifdef _WIN32
     if (!s_WinHttpDriver)
+    {
         s_WinHttpDriver = new WinHttpClient();
+    }
 
     DekiHttp::SetCurrent(s_WinHttpDriver);
     DEKI_LOG_DEBUG("[deki-http] WinHttpClient registered with DekiHttp");
@@ -25,7 +27,10 @@ void WinHttpClientComponent::Setup(SetupCallback onComplete)
     // Leave it empty for CurlHttpClientComponent to claim.
 #endif
 
-    if (onComplete) onComplete(true);
+    if (onComplete)
+    {
+        onComplete(true);
+    }
 }
 
 // Project open, not Play. This only installs the client object; it makes no

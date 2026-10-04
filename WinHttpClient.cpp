@@ -11,18 +11,17 @@ namespace DekiHttp
 
 #ifdef _WIN32
 
-
 std::string WinHttpClient::FetchUrl(const std::string& url)
 {
     std::wstring wUrl(url.begin(), url.end());
 
     URL_COMPONENTS urlComp{};
     urlComp.dwStructSize = sizeof(urlComp);
-    wchar_t hostName[256] = {0};
-    wchar_t urlPath[2048] = {0};
-    urlComp.lpszHostName    = hostName;
+    wchar_t hostName[256] = { 0 };
+    wchar_t urlPath[2048] = { 0 };
+    urlComp.lpszHostName = hostName;
     urlComp.dwHostNameLength = sizeof(hostName) / sizeof(wchar_t);
-    urlComp.lpszUrlPath     = urlPath;
+    urlComp.lpszUrlPath = urlPath;
     urlComp.dwUrlPathLength = sizeof(urlPath) / sizeof(wchar_t);
 
     if (!WinHttpCrackUrl(wUrl.c_str(), 0, 0, &urlComp))
@@ -31,9 +30,7 @@ std::string WinHttpClient::FetchUrl(const std::string& url)
         return "";
     }
 
-    HINTERNET hSession = WinHttpOpen(L"DekiEngine/1.0",
-                                     WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
-                                     WINHTTP_NO_PROXY_NAME,
+    HINTERNET hSession = WinHttpOpen(L"DekiEngine/1.0", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, WINHTTP_NO_PROXY_NAME,
                                      WINHTTP_NO_PROXY_BYPASS, 0);
     if (!hSession)
     {
@@ -52,9 +49,8 @@ std::string WinHttpClient::FetchUrl(const std::string& url)
     }
 
     DWORD flags = (urlComp.nScheme == INTERNET_SCHEME_HTTPS) ? WINHTTP_FLAG_SECURE : 0;
-    HINTERNET hRequest = WinHttpOpenRequest(hConnect, L"GET", urlPath,
-                                            NULL, WINHTTP_NO_REFERER,
-                                            WINHTTP_DEFAULT_ACCEPT_TYPES, flags);
+    HINTERNET hRequest =
+        WinHttpOpenRequest(hConnect, L"GET", urlPath, NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, flags);
     if (!hRequest)
     {
         DEKI_LOG_WARNING("[deki-http] WinHttpOpenRequest failed");
@@ -65,9 +61,11 @@ std::string WinHttpClient::FetchUrl(const std::string& url)
 
     WinHttpAddRequestHeaders(hRequest, L"User-Agent: DekiEngine/1.0", -1, WINHTTP_ADDREQ_FLAG_ADD);
 
-    BOOL ok = WinHttpSendRequest(hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0,
-                                 WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
-    if (ok) ok = WinHttpReceiveResponse(hRequest, NULL);
+    BOOL ok = WinHttpSendRequest(hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
+    if (ok)
+    {
+        ok = WinHttpReceiveResponse(hRequest, NULL);
+    }
 
     std::string result;
     if (ok)
@@ -77,7 +75,10 @@ std::string WinHttpClient::FetchUrl(const std::string& url)
         while (WinHttpReadData(hRequest, buffer, sizeof(buffer), &bytesRead) && bytesRead > 0)
         {
             result.append(buffer, bytesRead);
-            if (result.size() > 16 * 1024 * 1024) break; // 16 MB cap
+            if (result.size() > 16 * 1024 * 1024)
+            {
+                break;  // 16 MB cap
+            }
         }
     }
     else
