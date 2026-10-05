@@ -14,7 +14,6 @@ namespace DekiHttp
 DEKI_CATEGORY("System")
 DEKI_DISPLAY_NAME("curl HTTP Client")
 DEKI_DESCRIPTION("Handles HTTP requests on Linux and macOS, for editor and desktop runs.")
-DEKI_FORMER_NAME("CurlHttpClientComponent")
 class CurlHttpClientComponent : public Deki::SetupComponent
 {
 public:

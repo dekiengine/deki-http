@@ -13,7 +13,6 @@ namespace DekiHttp
 DEKI_CATEGORY("System")
 DEKI_DISPLAY_NAME("WinHTTP Client")
 DEKI_DESCRIPTION("Handles HTTP requests on Windows, for editor and desktop runs.")
-DEKI_FORMER_NAME("WinHttpClientComponent")
 class WinHttpClientComponent : public Deki::SetupComponent
 {
 public:
