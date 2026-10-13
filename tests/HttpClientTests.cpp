@@ -18,7 +18,8 @@
 #endif
 
 #include <chrono>
-#include <memory>
+#include <condition_variable>
+#include <mutex>
 #include <string>
 #include <thread>
 
@@ -53,9 +54,12 @@ protected:
         m_Server.Get("/query", [](const httplib::Request& req, httplib::Response& res)
                      { res.set_content(req.get_param_value("q"), "text/plain"); });
         m_Server.Get("/moved", [](const httplib::Request&, httplib::Response& res) { res.set_redirect("/hello"); });
-        m_Server.Get("/slow", [](const httplib::Request&, httplib::Response& res)
+        // Answers only once the test is over (or after 30 s), so the client's
+        // timeout is what ends the request, and teardown does not wait.
+        m_Server.Get("/slow", [this](const httplib::Request&, httplib::Response& res)
                      {
-                         std::this_thread::sleep_for(std::chrono::seconds(2));
+                         std::unique_lock<std::mutex> lock(m_SlowMutex);
+                         m_SlowCv.wait_for(lock, std::chrono::seconds(30), [this] { return m_SlowReleased; });
                          res.set_content("late", "text/plain");
                      });
         m_Server.Post("/echo", [](const httplib::Request& req, httplib::Response& res)
@@ -72,6 +76,11 @@ protected:
 
     void TearDown() override
     {
+        {
+            std::lock_guard<std::mutex> lock(m_SlowMutex);
+            m_SlowReleased = true;
+        }
+        m_SlowCv.notify_all();
         m_Server.stop();
         if (m_Thread.joinable())
         {
@@ -87,6 +96,9 @@ private:
     httplib::Server m_Server;
     std::thread m_Thread;
     int m_Port = 0;
+    std::mutex m_SlowMutex;
+    std::condition_variable m_SlowCv;
+    bool m_SlowReleased = false;
 };
 
 }  // namespace
@@ -157,6 +169,9 @@ TEST_F(HttpClientTest, NothingListeningIsATransportError)
 
 TEST_F(HttpClientTest, ATimeoutIsATransportError)
 {
+    // Not timed to the millisecond: WinHTTP was measured ending a 1 s request
+    // after about 4 s. What matters is that the call returns as a transport
+    // error instead of waiting on the server.
     const auto r = client.Get(Url("/slow"), {}, 1000);
     EXPECT_EQ(r.status, -1);
 }
