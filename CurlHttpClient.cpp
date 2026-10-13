@@ -1,7 +1,7 @@
 #include "CurlHttpClient.h"
 #include <deki/LogSystem.h>
 
-#if !defined(_WIN32) && !defined(ESP32)
+#if !defined(_WIN32) && !defined(ESP32) && !defined(ESP_PLATFORM)
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
@@ -17,8 +17,9 @@ namespace DekiHttp
 
 // This client runs the curl program, so it needs fork/exec and a filesystem
 // with curl on it. ESP32 has neither and uses ESPIDFHttpClient from
-// deki-esp32-integration, as Windows uses WinHttpClient.
-#if !defined(_WIN32) && !defined(ESP32)
+// deki-esp32-integration, as Windows uses WinHttpClient. ESP_PLATFORM also
+// covers a Tactility app, which is built with ESP-IDF but without ESP32.
+#if !defined(_WIN32) && !defined(ESP32) && !defined(ESP_PLATFORM)
 
 namespace
 {
@@ -261,14 +262,14 @@ IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string& url, const
     return SplitStatus(raw);
 }
 
-#else  // _WIN32 or ESP32
+#else  // _WIN32, ESP32 or ESP-IDF
 
 // Those platforms have their own client; here this file has only stubs, so
 // the package keeps one source list on every platform.
 
 std::string CurlHttpClient::FetchUrl(const std::string& /*url*/)
 {
-    DEKI_LOG_ERROR("[deki-http] CurlHttpClient is not used on Windows");
+    DEKI_LOG_ERROR("[deki-http] CurlHttpClient is not used on this platform");
     return "";
 }
 
@@ -282,6 +283,6 @@ IDekiHttpClient::Response CurlHttpClient::PostJson(const std::string&, const std
     return {};
 }
 
-#endif  // !_WIN32 && !ESP32
+#endif  // !_WIN32 && !ESP32 && !ESP_PLATFORM
 
 }  // namespace DekiHttp
