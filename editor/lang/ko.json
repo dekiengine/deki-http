@@ -3,5 +3,7 @@
     "Win Http Client Component": "WinHTTP 클라이언트 컴포넌트",
     "Handles HTTP requests on Linux and macOS, for editor and desktop runs.": "에디터와 데스크톱에서 실행할 때 Linux와 macOS의 HTTP 요청을 처리합니다.",
     "Handles HTTP requests on Windows, for editor and desktop runs.": "에디터와 데스크톱에서 실행할 때 Windows의 HTTP 요청을 처리합니다.",
-    "System": "시스템"
+    "System": "시스템",
+    "WinHTTP Client": "WinHTTP 클라이언트",
+    "curl HTTP Client": "curl HTTP 클라이언트"
 }

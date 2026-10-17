@@ -3,5 +3,7 @@
     "Win Http Client Component": "WinHTTP クライアントコンポーネント",
     "Handles HTTP requests on Linux and macOS, for editor and desktop runs.": "Linux と macOS で HTTP リクエストを処理します。エディターとデスクトップでの実行用です。",
     "Handles HTTP requests on Windows, for editor and desktop runs.": "Windows で HTTP リクエストを処理します。エディターとデスクトップでの実行用です。",
-    "System": "システム"
+    "System": "システム",
+    "WinHTTP Client": "WinHTTP クライアント",
+    "curl HTTP Client": "curl HTTP クライアント"
 }
