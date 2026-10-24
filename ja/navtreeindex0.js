@@ -6,7 +6,6 @@ var NAVTREEINDEX0 =
 "index.html#autotoc_md2":[2,2],
 "index.html#autotoc_md3":[2,3],
 "index.html#autotoc_md4":[2,4],
-"index.html#autotoc_md5":[2,5],
 "index.html#c-curlhttpclientcomponent":[1,0],
 "index.html#c-winhttpclientcomponent":[1,1],
 "index.html#changelog":[2],
