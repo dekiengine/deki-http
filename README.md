@@ -28,3 +28,6 @@ using namespace DekiHttp;
 obj->AddComponent<SomeComponent>();
 ```
 
+## Community
+
+Questions, ideas and what you made with Deki: [the Deki Discord](https://dekiengine.com/discord/).
